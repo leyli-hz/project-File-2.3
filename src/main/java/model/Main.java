@@ -2,6 +2,7 @@ package model;
 
 import controller.Mojoodi;
 import controller.Pardakht;
+import org.apache.log4j.Logger;
 import view.ViewMojoodi;
 import view.ViewPardakht;
 
@@ -11,7 +12,7 @@ public class Main {
 
 
     public static void main(String[] args) {
-
+        Logger logger = org.apache.log4j.Logger.getLogger(Main.class);
         Pardakht pardakht = new Pardakht();
         Mojoodi mojoodi = new Mojoodi();
 
@@ -19,7 +20,8 @@ public class Main {
         List<ViewPardakht> viewPardakhts = pardakht.exportToViewP();
         String s = mojoodi.checkTheMount(viewMojoodis, viewPardakhts);
         if (s != null) {
-            System.out.println("you can pay by this deposite number: " + s);
+
+            logger.info("you can pay by this deposite number: " + s);
             String s1 = mojoodi.updateDebtorMount(viewMojoodis, viewPardakhts);
             s1 = s1.concat(mojoodi.updateCreditorMount(viewMojoodis, viewPardakhts));
             mojoodi.writeUpdatedMount(s1);
