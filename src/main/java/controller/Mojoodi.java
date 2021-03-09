@@ -1,5 +1,6 @@
 package controller;
 
+import org.apache.log4j.Logger;
 import view.ViewMojoodi;
 import view.ViewPardakht;
 
@@ -14,6 +15,7 @@ import java.util.List;
 
 public class Mojoodi {
     private Path path = Paths.get("Files/mojoodi.txt");
+    private final Logger logger = Logger.getLogger(Mojoodi.class);
 
     public Path getPath() {
         return path;
@@ -25,6 +27,7 @@ public class Mojoodi {
     }
 
     public List<ViewMojoodi> exportToViewM() {
+        logger.debug("run Mojoodi.export method ");
         List<ViewMojoodi> mojoodiList = new ArrayList<>();
         try {
             BufferedReader bufferedReader = Files.newBufferedReader(getPath());
@@ -35,12 +38,13 @@ public class Mojoodi {
                 line = bufferedReader.readLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("something went wrong ! please check if the Mojoodi.txt is available or not !'\r\n'" + e.getMessage());
         }
         return mojoodiList;
     }
 
     public String checkTheMount(List<ViewMojoodi> listMojoodi, List<ViewPardakht> listPardakht) {
+        logger.debug("run Mojoodi.cheking method");
         Pardakht pardakht = new Pardakht();
         Long required = pardakht.sumOfCreditorMount(listPardakht);
 
@@ -61,6 +65,7 @@ public class Mojoodi {
     }
 
     public String updateDebtorMount(List<ViewMojoodi> listMojoodi, List<ViewPardakht> listPardakht) {
+        logger.debug("run Mojoodi.update method for debtor");
         String finalString = "";
         String payableAcc = checkTheMount(listMojoodi, listPardakht);
 
@@ -87,6 +92,7 @@ public class Mojoodi {
     }
 
     public String updateCreditorMount(List<ViewMojoodi> listMojoodi, List<ViewPardakht> listPardakht) {
+        logger.debug("run Mojoodi.update method for debtor");
         Log log = new Log();
         String finalString = "";
         String payableAcc = checkTheMount(listMojoodi, listPardakht);
@@ -100,6 +106,7 @@ public class Mojoodi {
                         String updatedmount = String.valueOf(updatedMount);
                         viewMojoodi.setMount(updatedMount);
                         log.writeLog(payableAcc + "\t" + viewMojoodi.getDepositNumb() + "\t" + newMount + "\r\n");
+                        // Mojoodi.logger.info(payableAcc + "\t" + viewMojoodi.getDepositNumb() + "\t" + newMount );
                         finalString = finalString.concat(viewMojoodi.getDepositNumb() + "\t" + updatedmount + "\r\n");
                         break;
                     }
@@ -110,9 +117,11 @@ public class Mojoodi {
     }
 
     public void writeUpdatedMount(String updatedString) {
+        logger.debug("run Mojoodi.write method to wtite on mojoodi.txt");
         try (BufferedWriter bufferedWriter = Files.newBufferedWriter(path)) {
             bufferedWriter.write(updatedString);
         } catch (IOException e) {
+            logger.error("something went wrong ! please check if the mojoodi.txt is available or not !'\r\n'" + e.getMessage());
             e.printStackTrace();
         }
     }
