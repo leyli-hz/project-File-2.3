@@ -1,5 +1,6 @@
 package controller;
 
+import org.apache.log4j.Logger;
 import view.ViewPardakht;
 
 import java.io.BufferedReader;
@@ -12,6 +13,7 @@ import java.util.List;
 
 public class Pardakht {
     private Path path = Paths.get("Files/pardakht.txt");
+    private final Logger logger = Logger.getLogger(Pardakht.class);
 
     public Path getPath() {
         return path;
@@ -23,6 +25,7 @@ public class Pardakht {
     }
 
     public List<ViewPardakht> exportToViewP() {
+        logger.debug("run Pardakht.export method");
         List<ViewPardakht> pardakhtList = new ArrayList<>();
         try {
             BufferedReader bufferedReader = Files.newBufferedReader(getPath());
@@ -34,12 +37,13 @@ public class Pardakht {
                 line = bufferedReader.readLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("something went wrong ! please check if the Mojoodi.txt is available or not !'\r\n'" + e.getMessage());
         }
         return pardakhtList;
     }
 
     public Long sumOfCreditorMount(List<ViewPardakht> list) {
+        logger.debug("run Pardakht.sum method");
         Long sum = 0l;
         for (ViewPardakht viewPardakht : list) {
             if (viewPardakht.getActionType().equals("c")) {
