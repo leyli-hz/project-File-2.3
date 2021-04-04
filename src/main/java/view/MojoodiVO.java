@@ -1,22 +1,24 @@
 package view;
 
-public class ViewMojoodi {
-    private Long mount;
+import java.math.BigDecimal;
+
+public class MojoodiVO {
+    private BigDecimal mount;
     private String depositNumb;
 
-    public ViewMojoodi() {
+    public MojoodiVO() {
     }
 
-    public ViewMojoodi(Long mount, String depositNumb) {
+    public MojoodiVO(BigDecimal mount, String depositNumb) {
         this.mount = mount;
         this.depositNumb = depositNumb;
     }
 
-    public Long getMount() {
+    public BigDecimal getMount() {
         return mount;
     }
 
-    public ViewMojoodi setMount(Long mount) {
+    public MojoodiVO setMount(BigDecimal mount) {
         this.mount = mount;
         return this;
     }
@@ -25,7 +27,7 @@ public class ViewMojoodi {
         return depositNumb;
     }
 
-    public ViewMojoodi setDepositNumb(String depositNumb) {
+    public MojoodiVO setDepositNumb(String depositNumb) {
         this.depositNumb = depositNumb;
         return this;
     }
