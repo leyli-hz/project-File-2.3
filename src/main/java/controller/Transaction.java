@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import view.TransactionVo;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,8 +18,11 @@ public class Transaction {
     public void makeLogContext(List<TransactionVo> transactionVos) {
         String logContext = "";
         for (TransactionVo transactionVo : transactionVos) {
-            logContext = logContext.concat(transactionVo.getSourceDeposit() + "\t" + transactionVo.getDestinationDeposit() + "\t"
-                    + transactionVo.getAmount() + "\r\n");
+            String sourceDeposit = transactionVo.getSourceDeposit();
+            String destinationDeposit = transactionVo.getDestinationDeposit();
+            BigDecimal transferedAmount = transactionVo.getAmount();
+            logContext = logContext.concat(sourceDeposit + "\t" + destinationDeposit + "\t"
+                    + transferedAmount + "\r\n");
         }
         writeLog(logContext);
     }

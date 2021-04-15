@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 public class PardakhtVO {
     public enum ActionType {
-        c, d;
+        creditor, debtor;
 
         public static ActionType findIgnoreCase(String actionType) throws NotFoundObjException {
             for (ActionType value : ActionType.values()) {
@@ -24,12 +24,6 @@ public class PardakhtVO {
     private ActionType actionType;
 
     public PardakhtVO() {
-    }
-
-    public PardakhtVO(BigDecimal amount, String depositeNumber, ActionType actionType) {
-        this.amount = amount;
-        this.depositeNumber = depositeNumber;
-        this.actionType = actionType;
     }
 
     public BigDecimal getAmount() {
@@ -57,5 +51,14 @@ public class PardakhtVO {
     public PardakhtVO setActionType(ActionType actionType) {
         this.actionType = actionType;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "PardakhtVO{" +
+                "amount=" + amount +
+                ", depositeNumber='" + depositeNumber + '\'' +
+                ", actionType=" + actionType +
+                '}';
     }
 }

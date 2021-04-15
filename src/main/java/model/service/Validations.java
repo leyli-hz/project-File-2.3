@@ -12,7 +12,7 @@ public class Validations {
     public boolean isDebtorExist(List<PardakhtVO> pardakhtVOS) throws NotFoundObjException {
         logger.debug("validations.isDebtorExist method is runnig. ");
         for (PardakhtVO pardakhtVO : pardakhtVOS) {
-            if (pardakhtVO.getActionType().name().equals("d")) {
+            if (pardakhtVO.getActionType().name().equalsIgnoreCase("debtor")) {
                 return true;
             }
         }
@@ -23,7 +23,7 @@ public class Validations {
     public boolean isCreditorExist(List<PardakhtVO> pardakhtVOS) throws NotFoundObjException {
         logger.debug("validations.isCreditorExist method is runnig .");
         for (PardakhtVO pardakhtVO : pardakhtVOS) {
-            if (pardakhtVO.getActionType().name().equals("c")) {
+            if (pardakhtVO.getActionType().name().equalsIgnoreCase("creditor")) {
                 return true;
             }
         }

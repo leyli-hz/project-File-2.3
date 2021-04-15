@@ -10,12 +10,6 @@ public class TransactionVo {
     public TransactionVo() {
     }
 
-    public TransactionVo(String sourceDeposit, String destinationDeposit, BigDecimal amount) {
-        this.sourceDeposit = sourceDeposit;
-        this.destinationDeposit = destinationDeposit;
-        this.amount = amount;
-    }
-
     public String getSourceDeposit() {
         return sourceDeposit;
     }
@@ -41,5 +35,14 @@ public class TransactionVo {
     public TransactionVo setAmount(BigDecimal amount) {
         this.amount = amount;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "TransactionVo{" +
+                "sourceDeposit='" + sourceDeposit + '\'' +
+                ", destinationDeposit='" + destinationDeposit + '\'' +
+                ", amount=" + amount +
+                '}';
     }
 }

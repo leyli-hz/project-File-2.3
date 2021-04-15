@@ -1,18 +1,21 @@
 package model;
 
+import Tasks.PayementTask;
+import common.FileHandling;
 import controller.Mojoodi;
 import controller.Pardakht;
 import exceptions.FilesException;
-import exceptions.NotFoundObjException;
 import org.apache.log4j.Logger;
 import view.MojoodiVO;
 import view.PardakhtVO;
 
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
-
     public static void main(String[] args) {
         Logger logger = org.apache.log4j.Logger.getLogger(Main.class);
         Pardakht pardakht = new Pardakht();
@@ -23,7 +26,8 @@ public class Main {
         fileHandling.createFile("mojoodi");
         fileHandling.createFile("pardakht");
 
-        if (fileHandling.isEmpty(pardakht.getPath())) {
+        boolean isPardakhtEmpty = fileHandling.isEmpty(pardakht.getPath());
+        if (isPardakhtEmpty) {
             String contentPardakht = fileHandling.makePardakhtContext("1.10.100.1", "2.20.200.1");
             try {
                 fileHandling.writeOnFile(contentPardakht, Paths.get("Files/pardakht.txt"));
@@ -31,11 +35,12 @@ public class Main {
                 logger.error(e.getMessage(), e.getCause());
             }
         } else {
-            System.out.println("#Pardakht file is not empty. paying salary will continue with previouse data.\r\n" +
+            logger.warn("#Pardakht file is not empty. paying salary will continue with previouse data.\r\n" +
                     "for new data Please delete file context before run the program!");
         }
 
-        if (fileHandling.isEmpty(mojoodi.getPath())) {
+        boolean isMojoodiEmpty = fileHandling.isEmpty(mojoodi.getPath());
+        if (isMojoodiEmpty) {
             String contentMojoodi = fileHandling.makeMojoodiContext("1.10.100.1", "2.20.200.1");
             try {
                 fileHandling.writeOnFile(contentMojoodi, Paths.get("Files/mojoodi.txt"));
@@ -43,26 +48,24 @@ public class Main {
                 logger.error(e.getMessage(), e.getCause());
             }
         } else {
-            System.out.println("#Mojoodi file is not empty! paying salary will continue with previouse data.\r\n " +
+            logger.warn("#Mojoodi file is not empty! paying salary will continue with previouse data.\r\n " +
                     "for new data Please delete file context before run the program!");
         }
 
         List<MojoodiVO> mojoodiVOS = mojoodi.exportToMojoodiVO();
         List<PardakhtVO> pardakhtVOS = pardakht.exportToPardakhtVO();
-        boolean flag = false;
-        try {
-            flag = mojoodi.checkTheMount(mojoodiVOS, pardakhtVOS);
-        } catch (NotFoundObjException e) {
-            logger.error(e.getMessage());
+
+        int coreCount = Runtime.getRuntime().availableProcessors();
+        ExecutorService executorService = Executors.newFixedThreadPool(coreCount);
+        for (int i = 0; i < 3; i++) {
+            Runnable paymentTask = new PayementTask(mojoodiVOS, pardakhtVOS);
+            executorService.execute(paymentTask);
+            try {
+                executorService.awaitTermination(1000, TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-        if (flag) {
-            logger.info("you can pay by this deposite number: " + Mojoodi.payableAccount);
-            String updatedString = mojoodi.updateDebtorMount(mojoodiVOS, pardakhtVOS);
-            updatedString = updatedString.concat(mojoodi.updateCreditorMount(mojoodiVOS, pardakhtVOS));
-            mojoodi.writeUpdatedMount(updatedString);
-            logger.info("the paying salary is done");
-        } else {
-            System.out.println("you dont have enough money ! please check your bank account.");
-        }
+        executorService.shutdown();
     }
 }

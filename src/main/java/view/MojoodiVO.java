@@ -9,11 +9,6 @@ public class MojoodiVO {
     public MojoodiVO() {
     }
 
-    public MojoodiVO(BigDecimal mount, String depositNumb) {
-        this.mount = mount;
-        this.depositNumb = depositNumb;
-    }
-
     public BigDecimal getMount() {
         return mount;
     }
@@ -30,5 +25,13 @@ public class MojoodiVO {
     public MojoodiVO setDepositNumb(String depositNumb) {
         this.depositNumb = depositNumb;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "MojoodiVO{" +
+                "mount=" + mount +
+                ", depositNumb='" + depositNumb + '\'' +
+                '}';
     }
 }

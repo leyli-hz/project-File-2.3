@@ -34,9 +34,12 @@ public class Pardakht {
             BufferedReader bufferedReader = Files.newBufferedReader(getPath());
             String line = bufferedReader.readLine();
             while (line != null) {
-                pardakhtList.add(new PardakhtVO().setActionType(view.PardakhtVO.ActionType.findIgnoreCase(line.substring(0, line.indexOf("\t"))))
-                        .setDepositeNumber(line.substring(line.indexOf("\t") + 1, line.lastIndexOf("\t")))
-                        .setAmount(new BigDecimal(line.substring(line.lastIndexOf("\t") + 1, line.length()))));
+                PardakhtVO pardakhtVO = new PardakhtVO();
+                pardakhtVO.setActionType(view.PardakhtVO.ActionType.findIgnoreCase(line.substring(0, line.indexOf("\t"))));
+                pardakhtVO.setAmount(new BigDecimal(line.substring(line.lastIndexOf("\t") + 1, line.length())));
+                pardakhtVO.setDepositeNumber(line.substring(line.indexOf("\t") + 1, line.lastIndexOf("\t")));
+                logger.debug("pardakhtVO object = " + pardakhtVO.toString());
+                pardakhtList.add(pardakhtVO);
                 line = bufferedReader.readLine();
             }
         } catch (IOException e) {
@@ -47,21 +50,19 @@ public class Pardakht {
         return pardakhtList;
     }
 
-    public BigDecimal sumOfCreditorMount(List<PardakhtVO> list) throws NotFoundObjException {
+    public BigDecimal sumOfCreditorMount(List<PardakhtVO> pardakhtVOlist) throws NotFoundObjException {
         logger.debug("run Pardakht.sum method");
         Validations validations = new Validations();
         BigDecimal sum = BigDecimal.ZERO;
-        for (PardakhtVO pardakhtVO : list) {
-            if (validations.isCreditorExist(list)) {
-                if (pardakhtVO.getActionType().name().equalsIgnoreCase("c")) {
+        for (PardakhtVO pardakhtVO : pardakhtVOlist) {
+            if (validations.isCreditorExist(pardakhtVOlist)) {
+                if (pardakhtVO.getActionType().name().equalsIgnoreCase("creditor")) {
                     sum = sum.add(pardakhtVO.getAmount());
                 }
             } else {
                 throw new NotFoundObjException("There is no Creditor Deposit number please check the pardakht File");
             }
-
         }
-
         return sum;
     }
 
