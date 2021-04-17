@@ -1,7 +1,7 @@
 package controller;
 
 import exceptions.NotFoundObjException;
-import model.service.Validations;
+import validation.Validations;
 import org.apache.log4j.Logger;
 import view.MojoodiVO;
 import view.PardakhtVO;
@@ -92,19 +92,19 @@ public class Mojoodi {
         for (PardakhtVO pardakhtVO : listPardakht) {
             if (pardakhtVO.getActionType().name().equals("debtor")) {
                 for (MojoodiVO mojoodiVO : listMojoodi) {
-                    if (mojoodiVO.getDepositNumb().equals(pardakhtVO.getDepositeNumber()) &&
-                            mojoodiVO.getDepositNumb().equals(debtorDeposit)) {
-                        BigDecimal oldMount = mojoodiVO.getMount();
-                        BigDecimal newMount = pardakhtVO.getAmount();
-                        BigDecimal updatedMount = oldMount.subtract(newMount);
-                        String updatedmount = String.valueOf(updatedMount);
-                        mojoodiVO.setMount(updatedMount);
-                        finalUpdatedString = finalUpdatedString.concat(mojoodiVO.getDepositNumb() + "\t" + updatedmount + "\r\n");
-                        break;
-
-                    } else if (mojoodiVO.getDepositNumb().equals(pardakhtVO.getDepositeNumber()) && !mojoodiVO.getDepositNumb().equals(debtorDeposit)) {
-                        finalUpdatedString = finalUpdatedString.concat(mojoodiVO.getDepositNumb() + "\t" + mojoodiVO.getMount() + "\r\n");
-                        break;
+                    if (mojoodiVO.getDepositNumb().equals(pardakhtVO.getDepositeNumber())) {
+                        if (mojoodiVO.getDepositNumb().equals(debtorDeposit)){
+                            BigDecimal oldMount = mojoodiVO.getMount();
+                            BigDecimal newMount = pardakhtVO.getAmount();
+                            BigDecimal updatedMount = oldMount.subtract(newMount);
+                            String updatedmount = String.valueOf(updatedMount);
+                            mojoodiVO.setMount(updatedMount);
+                            finalUpdatedString = finalUpdatedString.concat(mojoodiVO.getDepositNumb() + "\t" + updatedmount + "\r\n");
+                            break;
+                        }else {
+                            finalUpdatedString = finalUpdatedString.concat(mojoodiVO.getDepositNumb() + "\t" + mojoodiVO.getMount() + "\r\n");
+                            break;
+                        }
                     }
                 }
             }

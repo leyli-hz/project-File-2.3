@@ -47,7 +47,7 @@ public class FileHandling {
         int min = 1;
         BigDecimal amount = BigDecimal.ZERO;
         String string = "";
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 5; i++) {
             amount = BigDecimal.valueOf(Math.random() * (max - min) - min);
             total = total.add(amount.setScale(0, BigDecimal.ROUND_DOWN));
 
@@ -61,7 +61,7 @@ public class FileHandling {
     public String makeMojoodiContext(String debtorDepositNum, String creditorDepositNum) {
         logger.debug("FileHandling.makeMojoodiContext method is running.");
         String string = debtorDepositNum + "\t" + total.add(total.add(total)).toString() + "\r\n";
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 5; i++) {
             string = string.concat(creditorDepositNum.replace(creditorDepositNum.substring(9, creditorDepositNum.length()), String.valueOf(i + 1)));
             string = string.concat("\t" + "0" + "\r\n");
         }

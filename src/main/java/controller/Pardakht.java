@@ -1,7 +1,7 @@
 package controller;
 
 import exceptions.NotFoundObjException;
-import model.service.Validations;
+import validation.Validations;
 import org.apache.log4j.Logger;
 import view.PardakhtVO;
 

@@ -1,19 +1,19 @@
 package model;
 
-import Tasks.PayementTask;
-import common.FileHandling;
-import controller.Mojoodi;
-import controller.Pardakht;
-import exceptions.FilesException;
-import org.apache.log4j.Logger;
-import view.MojoodiVO;
-import view.PardakhtVO;
+        import Tasks.PayementTask;
+        import common.FileHandling;
+        import controller.Mojoodi;
+        import controller.Pardakht;
+        import exceptions.FilesException;
+        import org.apache.log4j.Logger;
+        import view.MojoodiVO;
+        import view.PardakhtVO;
 
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+        import java.nio.file.Paths;
+        import java.util.List;
+        import java.util.concurrent.ExecutorService;
+        import java.util.concurrent.Executors;
+        import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) {
@@ -25,7 +25,7 @@ public class Main {
         fileHandling.createFile("transaction");
         fileHandling.createFile("mojoodi");
         fileHandling.createFile("pardakht");
-
+//write on Files
         boolean isPardakhtEmpty = fileHandling.isEmpty(pardakht.getPath());
         if (isPardakhtEmpty) {
             String contentPardakht = fileHandling.makePardakhtContext("1.10.100.1", "2.20.200.1");

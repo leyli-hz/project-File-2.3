@@ -1,4 +1,4 @@
-package model.service;
+package validation;
 
 import exceptions.NotFoundObjException;
 import org.apache.log4j.Logger;
